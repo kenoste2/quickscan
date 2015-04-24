@@ -115,6 +115,7 @@
     <h2><?php echo $this->T("verklaring")?></h2>
     <h3><?php echo $this->T("general_score")?></h3>
     <?php echo $this->T("U_behaalde_een_score_van")?> <?php echo $this->result['categories']['mainscore'] ?>%.
+    <br><br>
     <?php
     foreach ($this->result['categories'] as $category => $result) { if ($category!='mainscore') {
         ?>
