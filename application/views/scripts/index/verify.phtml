@@ -1,0 +1,36 @@
+<div class="contentbox">
+    <?php if (!empty($this->companyForm)) { ?>
+    <?php if ($this->showError) {
+        print $this->Error($this->G('Niet alle velden correct ingevuld. Vervolledig a.u.b.'));
+    } ?>
+    <form enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this->url() ?>">
+        <p><?php echo $this->T("algemene_vragen_invullen")?></p>
+        <br>
+        <h2><?php echo $this->T("contact_gegevens")?></h2>
+        <div>
+            <?php echo $this->companyForm->contact_name ?>
+            <?php echo $this->companyForm->contact_forename ?>
+            <?php echo $this->companyForm->email ?>
+            <?php echo $this->companyForm->tel ?>
+        </div>
+        <h2><?php echo $this->T("bedrijfsgegevens")?></h2>
+        <div>
+            <?php echo $this->companyForm->name ?>
+            <?php echo $this->companyForm->vatnr ?>
+            <?php echo $this->companyForm->nr_clients ?>
+            <?php echo $this->companyForm->type_clients ?>
+            <?php echo $this->companyForm->sector ?>
+        </div>
+        <h2>Controle</h2>
+        <div>
+            <?php echo $this->companyForm->robot ?>
+        </div>
+        <?php echo $this->companyForm->session ?>
+        <?php echo $this->companyForm->submit ?>
+        <input type="hidden" name="companyform" value="1">
+    </form>
+    <?php } else  { ?>
+        <h1>Bedankt!</h1>
+        <p>Bedankt voor het invullen van de CM Scan vragenlijst.  Wij zullen u spoedig contacteren van zodra wij het rapport hebben opgesteld.</p>
+    <?php } ?>
+</div>

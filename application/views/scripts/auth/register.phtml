@@ -1,0 +1,50 @@
+<script>
+    $(function() {
+        $( "#accordion" ).accordion();
+    });
+</script>
+<script>
+    $(function() {
+        $( "input[type=submit], a, button" )
+            .button()
+            .click(function( event ) {
+            });
+    });
+</script>
+
+<style>
+    .sendbutton{
+        width : 100%;
+    }
+</style>
+
+<div class="contentbox">
+    <?php if ($this->showError) {
+        print $this->Error($this->G('Niet alle velden correct ingevuld. Vervolledig a.u.b.'));
+    } ?>
+<form enctype="application/x-www-form-urlencoded" method="post" action="<?php echo $this->url() ?>">
+      <h1>Registreren</h1>
+       <p>Eens u onderstaande gegevens correct heeft ingevuld, wordt u doorverwezen naar de de CM Scan. Het resultaat van deze scan wordt u overgemaakt per e-mail.</p>
+        <h2>Persoonlijke gegevens</h2>
+        <div>
+            <?php echo $this->companyForm->contact_name ?>
+            <?php echo $this->companyForm->contact_forename ?>
+            <?php echo $this->companyForm->email ?>
+            <?php echo $this->companyForm->tel ?>
+        </div>
+        <h2>Uw Bedrijfsgegevens</h2>
+        <div>
+        <?php echo $this->companyForm->name ?>
+        <?php echo $this->companyForm->vatnr ?>
+        <?php echo $this->companyForm->nr_clients ?>
+        <?php echo $this->companyForm->type_clients ?>
+    </div>
+    <h2>Controle</h2>
+    <div>
+        <?php echo $this->companyForm->robot ?>
+    </div>
+    <?php echo $this->companyForm->session ?>
+    <?php echo $this->companyForm->submit ?>
+
+</form>
+</div>

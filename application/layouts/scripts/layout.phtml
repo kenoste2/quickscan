@@ -1,0 +1,89 @@
+<!-- application/layouts/scripts/layout.phtml -->
+<?php echo $this->doctype() ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title><?php echo $this->headerTitle?></title>
+        <?php echo $this->headLink()->appendStylesheet(BASE_URL . 'css/global.css') ?>
+        <?php echo $this->headLink()->appendStylesheet(BASE_URL . 'css/start/jquery-ui-1.10.4.custom.css') ?>
+        <?php echo $this->headScript()->appendFile(BASE_URL . 'js/jquery-1.10.2.js') ?>
+        <?php echo $this->headScript()->appendFile(BASE_URL . 'js/jquery-ui-1.10.4.custom.js') ?>
+        <?php echo $this->headScript()->appendFile(BASE_URL . 'js/app.js') ?>
+        <style type="text/css">
+            @media print {
+                .noprint { display: none; }
+            }
+        </style>
+        <style>
+            .ui-autocomplete-loading { background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat; }
+            #header {
+                background-color: #FFF;
+            }
+            #wrapper {
+                width: 800px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        </style>
+        <script>
+            $(function() {
+                $( "input[type=submit], a, button" )
+                    .button()
+                    .click(function( event ) {
+                    });
+            });
+        </script>
+
+    </head>
+    <style>
+        body {
+            background-image: url();
+            background-color: #fff;
+            background: url("<?php echo $this->location() ?>/public/images/background.jpg") no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+            margin: 0px;
+            height: 100%;
+        }
+        .tagLine {
+            border-left: 1px solid #dcdcdc;
+            color: #888888;
+            height: 63px;
+            left: 160px;
+            padding-left: 10px;
+            position: absolute;
+            top: 10px;
+        }
+    </style>
+
+    <body>
+    <div id="header">
+        <table width="100%"><tr><td><img class="logo" height=65 src="<?php echo $this->Location(); ?>/public/images/logo.png" onclick="window.location.href='<?php echo $this->Location(); ?>/Auth/Logout'"><spann class="tagLine">strong results<br>solid relationships</spann></td><td align="right"><span class="titleBig">QUICK SCAN</span><br><span class="title">Triple A Solutions</span><br></td></tr></table></div>
+    <div id="wrapper">
+        <div id="content">
+            <?php if (!empty($this->bread)) { ?>
+                <i><?php echo $this->bread ?></i><br><br>
+            <?php } ?>
+            <?php echo $this->layout()->content ?>
+            <script>
+                <?php if (!empty($this->errors)) {
+                    foreach ($this->errors as $key => $error) {
+                        if (!empty($error)) {
+                            ?>
+                $("#<?php echo $key; ?>-input-label").addClass("errorfield");
+                $("#<?php echo $key; ?>-label").addClass("errorfield");
+                $("#<?php echo $key; ?>").addClass("errorfield");
+                $("#<?php echo $key; ?>-label").append("<b> * Onvolledig!</b>");
+                $("#<?php echo $key; ?>").append("<b> * Onvolledig!</b>");
+                <?php }
+            }
+        }
+        ?>
+            </script>
+            <span class="creator">&copy;  <?php echo date("Y"); ?>  Triple A Solutions</span
+        </div>
+    </div>
+    </body>
+</html>

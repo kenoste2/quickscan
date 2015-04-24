@@ -1,0 +1,32 @@
+<script>
+    $(function() {
+        $( "#accordion" ).accordion();
+    });
+</script>
+
+<table class="contentbox">
+    <form action="<?php echo $this->url() ?>" method="post">
+    <tr>
+        <td colspan="2"><?php if ($this->showError) {
+                echo $this->Error($this->G('Ongeldige inloggegevens, kijk uw gegevens na.'));
+            } ?>
+        </td>
+    </tr>
+    <tr>
+        <td width="50%"><h2>Login</h2>
+            <div>
+                    <?php echo $this->loginForm->username ?>
+                    <?php echo $this->loginForm->password ?>
+            </div></td>
+        <td class="leftBorder"><p>
+                <h2>Nog geen login gegevens? Doe direct een scan!</h2>
+                <p>Na uw registratie kan u onmiddelijk een scan uitvoeren.</p>
+                <p>Na het uitvoeren van de scan krijgt u het resultaat per e-mail!</p>
+                </td>
+    </tr>
+    <tr>
+        <td><input type="submit" name="submit" id="submit" value="Login"></form></td>
+        <td class="leftBorder"><form action="<?php echo $this->Location() ?>/Auth/Register" method="post"><input type="submit" name="registreer_submit" id="submit" value="Registreer"></form></td></td>
+    </tr>
+
+</table>
