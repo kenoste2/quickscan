@@ -8,6 +8,8 @@ class Application_Model_Answers extends Application_Model_Base
     public function save($session, $answers)
     {
 
+        $accessSession = new Zend_Session_Namespace('Access');
+
         if ($answers) {
             foreach ($answers as $id => $value) {
 
@@ -17,6 +19,7 @@ class Application_Model_Answers extends Application_Model_Base
                 if (!$exists) {
                     $data = array(
                         'session' => $session,
+                        'accesscode' => $accessSession->onlineAccesscode,
                         'question_id' => $id,
                         'answer' => $value,
                         'created' => date("Y-m-d"),
@@ -35,10 +38,13 @@ class Application_Model_Answers extends Application_Model_Base
     {
 
         $exists = $this->checkAnswerExists($data['session']);
+        $accessSession = new Zend_Session_Namespace('Access');
 
         if (!$exists) {
             $data['created'] = date("Y-m-d");
             $data['created_by'] = $this->online_user;
+            $data['accesscode'] = $accessSession->onlineAccesscode;
+
             $this->addData('answers_general', $data);
         }
     }

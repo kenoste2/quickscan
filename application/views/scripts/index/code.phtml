@@ -1,0 +1,11 @@
+<table class="contentbox" width="100%">
+        <tr>
+            <td>
+                <span class='bigform'><?php echo $this->T("enter_code")?></span><br><br>
+                <?php if ($this->wrongcode) {
+                    print $this->Error($this->G('ongeldige_code'));
+                } ?>
+                <?php echo $this->form ?>
+            </td>
+        </tr>
+</table>

@@ -70,7 +70,7 @@ class Application_Model_CommonFunctions
         $langSelect = strtoupper($lang);
 
         if (!empty($otherLang)) {
-            $lang = $otherLang;
+            $langSelect = $otherLang;
         }
 
         $tekst = $db->get_var("SELECT {$langSelect} FROM teksten WHERE code = '{$code}'");
@@ -226,7 +226,7 @@ class Application_Model_CommonFunctions
     }
 
 
-    public function texttolist($code) {
+    public function texttolist($code, $empty = true) {
         global $lang;
 
         $functions = new Application_Model_CommonFunctions();
@@ -234,7 +234,9 @@ class Application_Model_CommonFunctions
         $sectors = $this->T($code);
         $sectors = explode("!",$sectors);
 
-        $result = array();
+        if ($empty === true ) {
+            $result = array(''=>'-');
+        }
 
         if (!empty($sectors)) {
             foreach ($sectors as $sector) {

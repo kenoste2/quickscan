@@ -12,7 +12,6 @@ class Application_Model_Results extends Application_Model_Base {
         $result['general'] = $answersObj->getGeneralAnswersForSession($session);
         $result['categories'] = $this->getScoringForSession($session);
         $result['user'] = $userObj->getUser($username);
-
         return $result;
     }
 
@@ -44,6 +43,8 @@ class Application_Model_Results extends Application_Model_Base {
             $categoryCounter++;
 
 
+
+
             $mainQuestions = $questionsObj->getMainQuestionsForCategory($category->category);
             foreach($mainQuestions as $question) {
                 $mainAnswer = 'score'.$answersObj->getAnswerForQuestion($session, $question->id);
@@ -54,6 +55,7 @@ class Application_Model_Results extends Application_Model_Base {
 
             $nonMainQuestions = $questionsObj->getNonMainQuestionsForCategory($category->category);
             $score = 0;
+
             foreach($nonMainQuestions as $question) {
                 $answer = $mainAnswer . $answersObj->getAnswerForQuestion($session, $question->id);
                 $score  += $question->$answer;
@@ -89,6 +91,7 @@ class Application_Model_Results extends Application_Model_Base {
 
 
         unset($data['mainscore']);
+        $accessSession = new Zend_Session_Namespace('Access');
 
         foreach ($data as $category => $result) {
             $exists = $this->db->get_var("SELECT COUNT(*) FROM results WHERE
@@ -98,6 +101,7 @@ class Application_Model_Results extends Application_Model_Base {
             if (!$exists) {
                 $data = array (
                     'session' => $session,
+                    'accesscode' =>  $accessSession->onlineAccesscode,
                     'category' => $category,
                     'mainscore' => $result['mainscore'],
                     'score_correction' => $result['score_correction'],
@@ -110,6 +114,51 @@ class Application_Model_Results extends Application_Model_Base {
             }
         }
     }
+
+
+    public function searchByName($search)
+    {
+        $sql = "SELECT * FROM answers_general WHERE name LIKE '%{$search}%'";
+        $results = $this->db->get_results($sql);
+        return $results;
+    }
+    
+    
+    public function getAnswersPerCategory($session) {
+
+        $questionsObj = new Application_Model_Questions();
+        $answersObj = new Application_Model_Answers();
+
+        $categories = $questionsObj->getCategories();
+        $data = array();
+        foreach ($categories as $category) {
+            
+            $mainQuestions = $questionsObj->getMainQuestionsForCategory($category->category);
+            $questions = $questionsObj->getNonMainQuestionsForCategory($category->category);
+            foreach ($mainQuestions as $question) {
+                
+                $answer = "answer" . $answersObj->getAnswerForQuestion($session, $question->id);
+                
+                $data[$category->category][] = array(
+                    'question' => $question->question,
+                    'answer' => $question->$answer,
+                );  
+            }
+            foreach ($questions as $question) {
+
+                $answer = "answer" . $answersObj->getAnswerForQuestion($session, $question->id);
+
+                $data[$category->category][] = array(
+                    'question' => $question->question,
+                    'answer' => $question->$answer,
+                );
+            }
+        }
+        
+        return $data;
+
+
+        }
 
 }
 

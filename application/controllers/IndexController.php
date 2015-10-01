@@ -5,11 +5,37 @@ require_once 'application/controllers/BaseController.php';
 class IndexController extends BaseController {
 
     public function indexAction() {
+
+    }
+
+    public function codeAction() {
+
+        $form = new Application_Form_Code();
+        if ($this->getParam('submit')) {
+            $formData = $this->getRequest()->getParams();
+
+            $accessCodes = explode(";",$this->functions->T('accesscodes','NL'));
+
+            if (in_array($formData['code'], $accessCodes)) {
+                $accessSession = new Zend_Session_Namespace('Access');
+                $accessSession->onlineAccesscode = $formData['code'];
+                $this->redirect("/index/questions");
+            } else {
+                $this->view->wrongcode = true;
+            }
+
+        }
+        $this->view->form = $form;
     }
 
     public function questionsAction() {
-        $questionsObj =  new Application_Model_Questions();
 
+        $accessSession = new Zend_Session_Namespace('Access');
+
+        if (empty($accessSession->onlineAccesscode)) {
+            $this->redirect("/index/index");
+        }
+        $questionsObj =  new Application_Model_Questions();
 
         if (!$this->getParam('session')) {
             $uniqueId = uniqid();
@@ -27,6 +53,12 @@ class IndexController extends BaseController {
             $formData = $this->getRequest()->getParams();
             $answersArray = $formData['question'];
             $this->view->answers = $answersArray;
+            
+            
+            print "<pre>";
+            print_r($answersArray);
+            print "</pre>";
+            
 
             $incompleteQuestions = array();
             if (count($this->view->questions)) {
@@ -77,9 +109,9 @@ class IndexController extends BaseController {
                     'email' => $formData['email'],
                     'tel' => $formData['tel'],
                     'vatnr' => $formData['vatnr'],
-                    'nr_clients' => $formData['nr_clients'],
-                    'sector' => $formData['sector'],
-                    'type_clients' => $formData['type_clients'],
+                    //'nr_clients' => $formData['nr_clients'],
+                    //'sector' => $formData['sector'],
+                    //'type_clients' => $formData['type_clients'],
                 );
 
                 $answersObj->saveGeneral($data);
@@ -90,7 +122,7 @@ class IndexController extends BaseController {
 
                 $content = "Beste,
 
-                Er werd een nieuwe quickscan uitgevoer voor bedrijf {$result['general']->name}.
+                Er werd een nieuwe quickscan uitgevoerd voor bedrijf {$result['general']->name}.
 
                 Gegevens :
 
@@ -102,12 +134,12 @@ class IndexController extends BaseController {
 
                 Deze kan worden geraadpleegd via de url :
 
-                http://quickscan.aaa.be/index/report/session/{$formData['session']}.
+                <a href='http://quickscan.aaa.be/index/report/session/{$formData['session']}'>http://quickscan.aaa.be/index/report/session/{$formData['session']}</a>
 
                 Met vriendelijke groet,
                 Quickscan";
                 $mail = new Application_Model_Mail();
-                $mail->sendMail("software@aaa.be", "Nieuwe quickscan voor {$result['general']->name}", $content,$contentText = false, $attachments = false, $isUtf8 = false);
+                $mail->sendMail("quickscan@aaa.be", "Nieuwe quickscan voor {$result['general']->name}", $content,$contentText = false, $attachments = false, $isUtf8 = false);
                 $this->redirect("/index/report/session/{$formData['session']}");
             } else {
                 $this->view->showError = true;
@@ -117,7 +149,6 @@ class IndexController extends BaseController {
     }
 
     public function reportAction() {
-
         $resultObj = new Application_Model_Results();
         $session = $this->getParam('session');
         $result = $resultObj->getResult($session);

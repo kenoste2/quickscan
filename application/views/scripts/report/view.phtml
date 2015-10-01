@@ -103,12 +103,15 @@
     <?php }} ?>
 </script>
 <div class="contentbox">
-<h1> <?php echo $this->T("thanks_c")?></h1>
-<p><?php echo $this->T("aangemaakt_op")?> <?php echo $this->Date($this->result['general']->created)?> <?php echo $this->T("for_c")?> <?php echo $this->result['general']->name ?> <?php if ($this->result['general']->vatnr) { ?> ( <?php echo $this->result['general']->vatnr ?> ) <?php } ?>
+<br>
+    <h1 style="text-align: center">RAPPORT QUICK SCAN</h1>
+<h2><?php echo $this->result['general']->name ?></h2>
+<p><?php echo $this->T("aangemaakt_op")?> <?php echo $this->Date($this->result['general']->created)?> <?php if ($this->result['general']->vatnr) { ?> <?php echo "<br>".$this->result['general']->vatnr ?> <?php } ?>
 <br><?php echo $this->T("contactpersoon")?> : <?php echo $this->result['general']->contact_name ?> <?php echo $this->result['general']->contact_forename ?>
-<br><?php echo $this->T("email")?> :  <?php echo $this->result['general']->email ?>
-<br><?php echo $this->T("tel_mobiel")?> :  <?php echo $this->result['general']->tel ?>
+<br>E-mail : <?php echo $this->result['general']->email ?>
+<br>Tel : <?php echo $this->result['general']->tel ?>
 </p>
+<br><br>
 
 <table>
     <tr>
@@ -122,5 +125,31 @@
         </td>
     </tr>
 </table>
-    <?php echo $this->T("U_behaalde_een_score_van")?> <?php echo $this->result['categories']['mainscore'] ?>%.<br><?php echo $this->T("meer_info_c")?> <a href="mailto:quickscan@aaa.be"> quickscan@aaa.be</a> <?php echo $this->T("or_c")?> 02 704 47 90.
+    <br><br><br>
+    <?php foreach ($this->result['categories'] as $category => $scores ) { if ($category!='mainscore') { ?>
+        <h2><?php echo $category ?></h2>
+        <?php echo $this->T("U_behaalde_een_score_van")?> <?php echo $this->Amount($scores['score_total'])?>% <?php echo $this->T("voor_deze_peiler")?>.<br><br>
+    <?php } } ?>
+    <h2><?php echo $this->T("U_behaalde_een_algemene_score_van")?> <?php echo $this->Amount($this->result['categories']['mainscore']) ?>%.<br></h2>
+    <p style="page-break-after:always;"></p>
+    <table width="100%">
+        <tr>
+            <td><img class="logo" height=65 src="<?php echo $this->Location(); ?>/public/images/logoBig.png"
+                     onclick="window.location.href='<?php echo $this->Location(); ?>'">
+            </td>
+            <td align="right"><span class="titleBig">QUICK SCAN</span><br><span
+                    class="title">Triple A Solutions</span><br></td>
+        </tr>
+    </table>
+
+    <?php
+foreach ($this->answers as $category => $questions) { $i = 0; ?>
+<br>
+<h2><?php echo $category ?></h2><br>
+    <?php foreach ($questions  as $question) {  $i++;?>
+        <li><i><?php echo $question['question'] ?></i>&nbsp;&nbsp;<strong><?php echo $question['answer'] ?></strong></li>
+    <?php } ?>
+<?php } ?>
+    <br><br>
 </div>
+

@@ -114,15 +114,16 @@ class Application_Model_Questions extends Application_Model_Base {
     {
         global $lang;
 
-        $results = $this->db->get_results("SELECT question_{$lang} as question,
+        $sql = "SELECT question_{$lang} as question,
             answer1_{$lang} as answer1,
             answer2_{$lang} as answer2,
             answer3_{$lang} as answer3,
             answer4_{$lang} as answer4,
-            mainquestion, score1, score2, score3, score4, id,
-            theme_{$lang} as theme FROM questions FROM questions
-            WHERE category = '{$category}'
-            AND mainquestion = 0 ORDER BY id");
+            mainquestion,score1,score2,score3,score4,score11,score12,score13,score14,score21,score22,score23,score24,score31,score32,score33,score34,score41,score42, score43,score44,id,
+            theme_{$lang} as theme FROM questions
+            WHERE category_{$lang} = '{$category}'
+            AND mainquestion = 0 ORDER BY id";
+        $results = $this->db->get_results($sql);
         return $results;
     }
 
