@@ -13,6 +13,10 @@ class Application_Model_Answers extends Application_Model_Base
         if ($answers) {
             foreach ($answers as $id => $value) {
 
+                if (is_array($value)) {
+                    $value = implode(",",$value);
+                }
+
                 $exists = $this->db->get_var("SELECT COUNT(*) FROM answers
                     WHERE session = '{$session}'
                     AND question_id = {$id}");
@@ -26,7 +30,6 @@ class Application_Model_Answers extends Application_Model_Base
                         'created_by' => $this->online_user,
                     );
                     $this->addData('answers', $data);
-
                 }
             }
         }

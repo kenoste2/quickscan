@@ -14,8 +14,8 @@ class Application_Model_Questions extends Application_Model_Base {
             answer2_{$lang} as answer2,
             answer3_{$lang} as answer3,
             answer4_{$lang} as answer4,
-            mainquestion, score1, score2, score3, score4,
-            category_{$lang} as category,
+            questiontype , score1, score2, score3, score4, id ,
+            category_{$lang} as category
         FROM questions ORDER BY category_{$lang}, id";
 
         $results = $this->db->get_results($sql);
@@ -35,7 +35,7 @@ class Application_Model_Questions extends Application_Model_Base {
                     'score2' => $row->score2,
                     'score3' => $row->score3,
                     'score4' => $row->score4,
-                    'mainquestion' => $row->mainquestion,
+                    'questiontype' => $row->questiontype,
                 );
             }
         }
@@ -95,7 +95,7 @@ class Application_Model_Questions extends Application_Model_Base {
         return $results;
     }
 
-    public function getMainQuestionsForCategory($category)
+    public function getQuestionsForCategory($category)
     {
         global $lang;
 
@@ -103,11 +103,12 @@ class Application_Model_Questions extends Application_Model_Base {
             answer1_{$lang} as answer1,
             answer2_{$lang} as answer2,
             answer3_{$lang} as answer3,
-            answer4_{$lang} as answer4,
-            mainquestion, score1, score2, score3, score4, id,
-            theme_{$lang} as theme FROM questions
+            answer4_{$lang} as answer4
+            ,score1, score2, score3, score4, id,
+            category_{$lang} as category FROM questions
             WHERE category_{$lang} = '{$category}'
-            AND mainquestion = 1 ORDER BY id");
+            ORDER BY id");
+
         return $results;
     }
     public function getNonMainQuestionsForCategory($category)

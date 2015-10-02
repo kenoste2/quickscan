@@ -23,15 +23,15 @@
         <div id="accordion">
             <?php if (!empty($this->themes)) { $counter = count($this->themes); $i = 0; foreach ($this->themes as $theme) {  $i++; ?>
 
-                <h3><?php echo $theme->theme ?></h3>
+                <h3><?php echo $theme->category ?></h3>
                 <div class='showable'>
-                    <?php if (!empty($this->questions[$theme->theme])) { foreach ($this->questions[$theme->theme] as $id => $question) { ?>
+                    <?php if (!empty($this->questions[$theme->category])) { foreach ($this->questions[$theme->category] as $id => $question) { ?>
                         <p>
-                            <dt <?php if (in_array($id, $this->incompleteQuestions)) echo "class='errorfield'"; ?> ><?php echo $question['question'] ?></dt>
+                            <dt <?php if (in_array($id, $this->incompleteQuestions)) echo "class='errorfield'"; ?> ><?php echo $id ?>. <?php echo $question['question'] ?></dt>
                         <dd><table>
                                 <tr>
                                     <td>
-                                        <?php if (!empty($question['answer1'])) { ?><label><input type="radio" name="question[<?php echo $id?>]" id="question<?php echo $id?>-1" value='1' <?php if ($this->answers[$id] == '1') echo "checked"; ?> >
+                                        <?php if (!empty($question['answer1'])) { ?><label><input type="<?php if ($question['questiontype'] == 'R') { echo "radio"; } else { echo "checkbox"; } ?>" name="question[<?php echo $id?>]<?php if ($question['questiontype'] == 'C') echo "[1]" ?>" id="question<?php echo $id?>-1" value='1' <?php if ($this->answers[$id] == '1' or $this->answers[$id][1] == '1') echo "checked"; ?> >
                                     </td>
                                     <td>
                                         <?php echo $question['answer1'] ?></label><?php } ?>
@@ -39,7 +39,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <?php if (!empty($question['answer2'])) { ?><label><input type="radio" name="question[<?php echo $id?>]" id="question<?php echo $id?>-2" value='2' <?php if ($this->answers[$id] == '2') echo "checked"; ?>>
+                                        <?php if (!empty($question['answer2'])) { ?><label><input type="<?php if ($question['questiontype'] == 'R') { echo "radio"; } else { echo "checkbox"; } ?>" name="question[<?php echo $id?>]<?php if ($question['questiontype'] == 'C') echo "[2]" ?>" id="question<?php echo $id?>-2" value='2' <?php if ($this->answers[$id] == '2' or $this->answers[$id][2] == '2') echo "checked"; ?>>
                                     </td>
                                     <td>
                                         <?php echo $question['answer2'] ?></label><?php } ?>
@@ -47,7 +47,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <?php if (!empty($question['answer3'])) { ?><label><input type="radio" name="question[<?php echo $id?>]" id="question<?php echo $id?>-3" value='3' <?php if ($this->answers[$id] == '3') echo "checked"; ?>>
+                                        <?php if (!empty($question['answer3'])) { ?><label><input type="<?php if ($question['questiontype'] == 'R') { echo "radio"; } else { echo "checkbox"; } ?>" name="question[<?php echo $id?>]<?php if ($question['questiontype'] == 'C') echo "[3]" ?>" id="question<?php echo $id?>-3" value='3' <?php if ($this->answers[$id] == '3' or $this->answers[$id][3] == '3') echo "checked"; ?>>
                                     </td>
                                     <td>
                                         <?php echo $question['answer3'] ?></label><?php } ?>
@@ -55,7 +55,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <?php if (!empty($question['answer4'])) { ?><label><input type="radio" name="question[<?php echo $id?>]" id="question<?php echo $id?>-4" value='4' <?php if ($this->answers[$id] == '4') echo "checked"; ?>>
+                                        <?php if (!empty($question['answer4'])) { ?><label><input type="<?php if ($question['questiontype'] == 'R') { echo "radio"; } else { echo "checkbox"; } ?>" name="question[<?php echo $id?>]<?php if ($question['questiontype'] == 'C') echo "[4]" ?>" id="question<?php echo $id?>-4" value='4' <?php if ($this->answers[$id] == '4'  or $this->answers[$id][4] == '4') echo "checked"; ?>>
                                     </td>
                                     <td>
                                         <?php echo $question['answer4'] ?></label><?php } ?>

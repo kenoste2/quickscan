@@ -42,47 +42,44 @@ class Application_Model_Results extends Application_Model_Base {
             $score = 0;
             $categoryCounter++;
 
+            $questions = $questionsObj->getQuestionsForCategory($category->category);
+            
+            foreach($questions as $question) {
+                $answer = $answersObj->getAnswerForQuestion($session, $question->id);
 
+                if (stripos($answer,",") !== false ) {
+                    $answers = explode(",",$answer);
+                    foreach ($answers as $answer) {
+                        $answerString = 'score'.$answer;
+                        $score  += $question->$answerString;
+                    }
+                } else {
+                    $answerString = 'score'.$answer;
+                    $score  += $question->$answerString;
+                }
 
-
-            $mainQuestions = $questionsObj->getMainQuestionsForCategory($category->category);
-            foreach($mainQuestions as $question) {
-                $mainAnswer = 'score'.$answersObj->getAnswerForQuestion($session, $question->id);
-                $score  += $question->$mainAnswer;
-                
             }
             $data[$category->category]['mainscore'] = $score;
 
-            $nonMainQuestions = $questionsObj->getNonMainQuestionsForCategory($category->category);
-            $score = 0;
-
-            foreach($nonMainQuestions as $question) {
-                $answer = $mainAnswer . $answersObj->getAnswerForQuestion($session, $question->id);
-                $score  += $question->$answer;
-            }
-            $data[$category->category]['score_correction'] = $score;
 
 
             $score_total = $data[$category->category]['mainscore'] + $data[$category->category]['score_correction'];
-            if ($score_total > 100) {
-                $score_total = 100;
+            if ($score > 100) {
+                $score = 100;
             }
-            if ($score_total < 0) {
-                $score_total = 0;
+            if ($score < 0) {
+                $score = 0;
             }
 
-            $data[$category->category]['score_total'] = $score_total;
-            $mainScore += $score_total;
-
+            $data[$category->category]['score_total'] = $score;
+            $mainScore += $score;
         }
 
         $mainScore = $mainScore / $categoryCounter;
 
         $data['mainscore'] = $mainScore;
 
-
         $this->saveResult($session, $data);
-
         return $data;
     }
 
@@ -104,7 +101,7 @@ class Application_Model_Results extends Application_Model_Base {
                     'accesscode' =>  $accessSession->onlineAccesscode,
                     'category' => $category,
                     'mainscore' => $result['mainscore'],
-                    'score_correction' => $result['score_correction'],
+                    'score_correction' => 0,
                     'score_total' => $result['score_total'],
                     'created' => date("Y-m-d"),
                     'created_by' => $this->online_user,
@@ -126,6 +123,8 @@ class Application_Model_Results extends Application_Model_Base {
     
     public function getAnswersPerCategory($session) {
 
+        global $lang;
+
         $questionsObj = new Application_Model_Questions();
         $answersObj = new Application_Model_Answers();
 
@@ -133,12 +132,13 @@ class Application_Model_Results extends Application_Model_Base {
         $data = array();
         foreach ($categories as $category) {
             
-            $mainQuestions = $questionsObj->getMainQuestionsForCategory($category->category);
-            $questions = $questionsObj->getNonMainQuestionsForCategory($category->category);
-            foreach ($mainQuestions as $question) {
+            $questions = $questionsObj->getQuestionsForCategory($category->category);
+            foreach ($questions as $question) {
                 
                 $answer = "answer" . $answersObj->getAnswerForQuestion($session, $question->id);
-                
+
+
+
                 $data[$category->category][] = array(
                     'question' => $question->question,
                     'answer' => $question->$answer,
@@ -146,18 +146,28 @@ class Application_Model_Results extends Application_Model_Base {
             }
             foreach ($questions as $question) {
 
-                $answer = "answer" . $answersObj->getAnswerForQuestion($session, $question->id);
+                $answer = $answersObj->getAnswerForQuestion($session, $question->id);
 
+                $answerArray = array();
+
+                if (stripos($answer,",") !== false ) {
+                    $answers = explode(",",$answer);
+
+                    foreach ($answers as $answer) {
+                        $answerString = 'answer'.$answer;
+                        $answerArray[]  = $question->$answerString;
+                    }
+                } else {
+                    $answerString = 'answer'.$answer;
+                    $answerArray[] = $question->$answerString;
+                }
                 $data[$category->category][] = array(
                     'question' => $question->question,
-                    'answer' => $question->$answer,
+                    'answer' => implode(' - ',$answerArray),
                 );
             }
         }
-        
         return $data;
-
-
         }
 
 }

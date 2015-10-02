@@ -45,10 +45,14 @@ class IndexController extends BaseController {
         }
 
 
-        $this->view->questions = $questionsObj->getQuestionsGroupedByTheme();
-        $this->view->themes = $questionsObj->getThemes();
+        $this->view->questions = $questionsObj->getQuestionsGroupedByCategory();
+        
 
+        $this->view->themes = $questionsObj->getCategories();
 
+        print "<pre>";
+        print_r($this->view->questions);
+        print "</pre>";
         if ($this->getParam('submit')) {
             $formData = $this->getRequest()->getParams();
             $answersArray = $formData['question'];
@@ -58,6 +62,7 @@ class IndexController extends BaseController {
             print "<pre>";
             print_r($answersArray);
             print "</pre>";
+            
             
 
             $incompleteQuestions = array();
@@ -117,7 +122,9 @@ class IndexController extends BaseController {
                 $answersObj->saveGeneral($data);
 
                 $resultObj = new Application_Model_Results();
+
                 $result = $resultObj->getResult($formData['session']);
+
 
 
                 $content = "Beste,
