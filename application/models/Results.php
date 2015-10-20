@@ -134,17 +134,6 @@ class Application_Model_Results extends Application_Model_Base {
             
             $questions = $questionsObj->getQuestionsForCategory($category->category);
             foreach ($questions as $question) {
-                
-                $answer = "answer" . $answersObj->getAnswerForQuestion($session, $question->id);
-
-
-
-                $data[$category->category][] = array(
-                    'question' => $question->question,
-                    'answer' => $question->$answer,
-                );  
-            }
-            foreach ($questions as $question) {
 
                 $answer = $answersObj->getAnswerForQuestion($session, $question->id);
 

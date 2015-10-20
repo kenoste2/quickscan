@@ -50,9 +50,6 @@ class IndexController extends BaseController {
 
         $this->view->themes = $questionsObj->getCategories();
 
-        print "<pre>";
-        print_r($this->view->questions);
-        print "</pre>";
         if ($this->getParam('submit')) {
             $formData = $this->getRequest()->getParams();
             $answersArray = $formData['question'];
